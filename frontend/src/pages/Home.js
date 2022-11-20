@@ -74,7 +74,7 @@ const Home = () => {
                           <div >
                           <Boxes cheader="Self Transactions" ctitle="" ctext={<><button onClick={handleShow} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised" type="button">
                           <Unicons.UilPlus className=" uil uil-at"  />
-                            </button>{selfExpenses.length>0 && selfExpenses.map((exp,idx)=><SelfExpense key={idx} expenseData={exp}/>)} </>}/>   
+                            </button>{selfExpenses.length>0 && selfExpenses.map((exp,idx)=><SelfExpense  key={idx} expenseData={exp}/>)} </>}/>   
                          </div>
                   </Col>
                 </Row>
@@ -83,7 +83,7 @@ const Home = () => {
                   <div>
                   <Boxes cheader="Group Transactions" ctitle="" ctext={<> <button  onClick={handleShowGroup} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised" type="button">
                   <Unicons.UilPlus className=" uil uil-at"  />
-                    </button>{groups.length>0 && groups.map((exp,idx)=><Group key={idx} expenseData={exp}/>)} </>}/>  
+                    </button>{groups.length>0 && groups.map((exp,idx)=><Group onClick={handleShow} key={idx} expenseData={exp} idx={idx}/>)} </>}/>  
                  </div>
           </Col>
         </Row>

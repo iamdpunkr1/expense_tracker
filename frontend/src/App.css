@@ -190,4 +190,24 @@ display: none;
   width: 150px  !important;
   height: 122px  !important;
   margin-left: 10px !important;
+  box-shadow: 0 4px 12px 0 rgba(255,235,167,.2) !important;
+}
+
+.groupHeading{
+  background-color: #6861ed !important;  
+  color: #c4c3ca !important;
+  background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/1462889/pat.svg');
+  background-position: bottom center;
+  box-shadow: 0 0 15px 0 rgba(255,235,167,.2)  !important;
+    padding-top: 20px;
+}
+
+#dropdown-basic-button{
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dropDownGap{
+  visibility: hidden;
+ margin-top: 5px;
 }
