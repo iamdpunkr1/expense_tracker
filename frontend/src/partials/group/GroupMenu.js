@@ -8,6 +8,7 @@ import Stack from 'react-bootstrap/Stack';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge'
 import AddBtn from '../AddBtn';
+// import Button from 'react-bootstrap/Button';
 import * as Unicons from '@iconscout/react-unicons';
 
 
@@ -18,8 +19,8 @@ const GroupMenu = () => {
         <>
         <Navigation/>
         <Container className='mt-5'>
-            <Row className='groupHeading'>
-                <Col sm={10}><h1>Group Name: </h1>
+            <Row className='groupHeading mb-1'>
+                <Col  sm={10}><h3 className='ml-3'>Group: "Football"</h3>
                      <p>Created by: Dipankar</p>
                 </Col>
                 <Col sm={2}>
@@ -27,7 +28,11 @@ const GroupMenu = () => {
                 </Col>
             </Row>
 
+            <Badge bg="secondary" className='m-1'>Dipnakar Prasad   <Unicons.UilTimesCircle  /></Badge>
+            <Badge bg="secondary" className='m-1'>Akash Chetia  <Unicons.UilTimesCircle  /></Badge>
+            <Badge bg="secondary" className='m-1'>Sagar Das   <Unicons.UilTimesCircle  /></Badge>
             <Row  className='mt-2'>
+
             <Tabs
             defaultActiveKey="profile"
             id="justify-tab-example"
@@ -108,8 +113,45 @@ const GroupMenu = () => {
                 </Stack>
            </Tab>
             <Tab eventKey="profile" title="Balance">
-            Those pretty wrongs that liberty commits, When I am sometime absent from thy heart, Thy beauty, and thy years full well befits, For still temptation follows where thou art. Gentle thou art, and therefore to be won, Beauteous thou art, therefore to be assail'd; And when a woman woos, what woman's son Will sourly leave her till he have prevail'd? Ay me! but yet thou mightst my seat forbear, And chide thy beauty and thy straying youth,
-            </Tab>
+                <Row>
+                  <Col sm={6}>
+                  <Card
+                  className=" selfexpense mb-2"
+                  >
+                  <Card.Header >Akash Chetia</Card.Header>
+                  <Card.Body className="cardBody">
+                    <Card.Text>
+                    <Row>
+    
+                      <Col xs={3} sm={3}>
+                      &#8377; 1400
+                      </Col>
+                    </Row>
+    
+                    </Card.Text>
+                  </Card.Body>
+                </Card> 
+                  </Col>
+                  <Col sm={6}>
+                  <Card
+                  className=" selfexpense"
+                  >
+                  <Card.Header >Akash Chetia</Card.Header>
+                  <Card.Body className="cardBody">
+                    <Card.Text>
+                    <Row>
+    
+                      <Col xs={3} sm={3}>
+                      &#8377; 1400
+                      </Col>
+                    </Row>
+    
+                    </Card.Text>
+                  </Card.Body>
+                </Card> 
+                  </Col>
+                </Row>
+          </Tab>
           </Tabs>
             </Row>
         </Container>

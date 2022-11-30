@@ -209,5 +209,25 @@ display: none;
 
 .dropDownGap{
   visibility: hidden;
- margin-top: 5px;
+  margin-top: 5px;
+}
+
+.navbar-brand{
+  color: #c4c3ca !important;
+  text-decoration: none !important;
+  font-family:'Poppins', sans-serif !important;
+}
+
+.delete{
+  cursor: pointer;
+}
+
+.equally{
+  color: #ffeba7 !important;
+  background-color: #2a2b38  !important;
+  margin-left: 10px !important;
+  box-shadow: 0 2px 6px 0 rgba(255,235,167,.2) !important;
+  font-size: small !important;
+  letter-spacing: normal;
+  text-transform: none;
 }

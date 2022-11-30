@@ -4,8 +4,9 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import Tab from 'react-bootstrap/Tab';
-import Tabs from 'react-bootstrap/Tabs';
+import Badge from 'react-bootstrap/Badge';
+// import Tab from 'react-bootstrap/Tab';
+// import Tabs from 'react-bootstrap/Tabs';
 import * as Unicons from '@iconscout/react-unicons';
 import { useState } from 'react';
 
@@ -25,6 +26,10 @@ const AddBtn = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [showMember, setShowMember] = useState(false);
+  const handleCloseMember = () => setShowMember(false);
+  const handleShowMember = () => setShowMember(true);
+
   const handleSubmit=(e)=>{
     e.preventDefault()
     let temp=selfExpenses
@@ -39,9 +44,9 @@ const AddBtn = () => {
   }
     return ( 
     <>
-        <DropdownButton drop="start" id="dropdown-basic-button" title="+ Create ">
-        <Dropdown.Item href="#/action-1" onClick={handleShow}><Unicons.UilReceiptAlt   /> Add Expense</Dropdown.Item>
-        <Dropdown.Item href="#/action-2"><Unicons.UilUsersAlt  /> Add Member</Dropdown.Item>
+        <DropdownButton drop="start" id="dropdown-basic-button" title="+ Create " className='m-2'>
+        <Dropdown.Item href="" onClick={handleShow}><Unicons.UilReceiptAlt   /> Add Expense</Dropdown.Item>
+        <Dropdown.Item href=""  onClick={handleShowMember}><Unicons.UilUsersAlt  /> Add Member</Dropdown.Item>
         </DropdownButton>
 
         
@@ -111,18 +116,14 @@ const AddBtn = () => {
       <div>
       <br/>
       <p>Split:</p>
-      <Tabs
-      defaultActiveKey="profile"
-      id="justify-tab-example"
-      className="mb-3"
-      justify
-    >
-      <Tab eventKey="home" title="Equally">
-      Akash  Dipankar
-     </Tab>
-      <Tab eventKey="profile" title="Unequally">
-      Akash  Dipankar </Tab>
-    </Tabs>
+          <Button variant="primary" className='m-1 equally'>
+          Akash Chetia <Badge bg="secondary">&#8377; 50</Badge>
+          <span className="visually-hidden">unread messages</span>
+        </Button>
+          <Button variant="primary" className='m-1 equally'>
+          Dipankar Prasad <Badge bg="secondary">&#8377; 50</Badge>
+          <span className="visually-hidden"> 50</span>
+        </Button>
       </div>
         </Form.Group>
         <Modal.Footer>
@@ -135,6 +136,39 @@ const AddBtn = () => {
       </Modal.Body>
     </Modal>
 
+
+
+   
+    <Modal className='myModal'  show={showMember} onHide={handleCloseMember}>
+    <div >
+    <Modal.Header closeButton>
+      <Modal.Title>Add a member</Modal.Title>
+    </Modal.Header>
+    </div>
+    <Modal.Body >
+      <form >
+      <div className="form-group mt-3">
+      <input
+        type="email"
+        name="logemail"
+        className="form-style"
+        placeholder="Enter member's email id"
+        id="logemail"
+        autoComplete="off"
+        required
+      />
+      <Unicons.UilAt className="input-icon uil uil-at"  />
+    </div>
+
+      <Modal.Footer>
+      <Button type='submit'  className="btn">
+       Add
+      </Button>
+    </Modal.Footer>
+      </form>
+    </Modal.Body>
+  </Modal>
+    
     </>
   );
 }

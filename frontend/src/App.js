@@ -4,6 +4,8 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import GroupMenu from './partials/group/GroupMenu';
+import About from './partials/group/About';
+import Contact from './pages/Contact';
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
             <Route path='/login' element={<Login/>}/>
             <Route path='/signup' element={<Signup/>}/>
             <Route path='/groups/:id' element={<GroupMenu/>}/>
+            <Route path='/about' element={<About/>}/>
+            <Route path='/contact' element={<Contact/>}/>
         </Routes>
       </BrowserRouter>
     </div>

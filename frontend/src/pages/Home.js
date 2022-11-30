@@ -10,6 +10,9 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import SelfExpense from '../partials/Expenses/SelfExpense';
 import Group from '../partials/group/Group';
+// import Card from 'react-bootstrap/Card';
+// import Stack from 'react-bootstrap/Stack';
+import Badge from 'react-bootstrap/Badge'
 
 
 
@@ -64,15 +67,24 @@ const Home = () => {
         <Navigation/>
         <Container className='mt-5'>
         <Row>
-          <Col sm={12} md={4}><div className='box1'>  
-                  <Boxes cheader="User Info" ctitle="Dipankar Prasad" ctext="iamdpunkr@gmail.com" />  
-                  <Boxes cheader="Total Balance" ctitle="Self  |  Group" ctext="250  |  -45" />   
+          <Col sm={12} md={4}>
+          <div className='box1'>  
+                  <Boxes className="totalBalance" cheader="Total Balance" ctitle="" ctext={<>
+                    
+                    <h6 className='m-2'>
+                    Self Balance <Badge bg="primary">234234</Badge>
+                    </h6>
+                    <br/>
+                    <h6 className='m-2'>
+                    Group Balance <Badge bg="primary">234234</Badge>
+                    </h6>
+                    </>} />   
           </div></Col>
           <Col sm={12} md={8}>
                 <Row>
                         <Col>
                           <div >
-                          <Boxes cheader="Self Transactions" ctitle="" ctext={<><button onClick={handleShow} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised" type="button">
+                          <Boxes cheader="Self Transactions" ctitle="" ctext={<><button onClick={handleShow} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised mt-3" type="button">
                           <Unicons.UilPlus className=" uil uil-at"  />
                             </button>{selfExpenses.length>0 && selfExpenses.map((exp,idx)=><SelfExpense  key={idx} expenseData={exp}/>)} </>}/>   
                          </div>
@@ -81,7 +93,7 @@ const Home = () => {
                 <Row>
                 <Col>
                   <div>
-                  <Boxes cheader="Group Transactions" ctitle="" ctext={<> <button  onClick={handleShowGroup} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised" type="button">
+                  <Boxes cheader="Group Transactions" ctitle="" ctext={<> <button  onClick={handleShowGroup} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised  mt-3" type="button">
                   <Unicons.UilPlus className=" uil uil-at"  />
                     </button>{groups.length>0 && groups.map((exp,idx)=><Group onClick={handleShow} key={idx} expenseData={exp} idx={idx}/>)} </>}/>  
                  </div>
@@ -110,6 +122,7 @@ const Home = () => {
               placeholder="0"
               id="num"
               autoComplete="off"
+              required
             />
             <Unicons.UilRupeeSign className="input-icon uil uil-at"  />
           </div>
@@ -123,6 +136,7 @@ const Home = () => {
             placeholder="what was this expense for"
             id="expenseFor"
             autoComplete="off"
+            required
           />
           <Unicons.UilReceipt  className="input-icon uil uil-at"  />
         </div>
@@ -137,6 +151,7 @@ const Home = () => {
           id="date"
           autoComplete="off"
           pattern="\d{2}/\d{2}/\d{4}" 
+          required
         />
         <Unicons.UilCalender  className="input-icon uil uil-at"  />
       </div>
@@ -185,6 +200,7 @@ const Home = () => {
           placeholder="Group Name"
           id="expenseFor"
           autoComplete="off"
+          required
         />
         <Unicons.UilUsersAlt className="input-icon uil uil-at"  />
       </div>
