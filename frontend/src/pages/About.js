@@ -1,5 +1,5 @@
 import Container from 'react-bootstrap/Container';
-import Navigation from '../Navigation';
+import Navigation from '../partials/Navigation';
 const About = () => {
     return ( 
         <>

@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Navigation from "../partials/Navigation";
 import Boxes from "../partials/Boxes"
 import * as Unicons from '@iconscout/react-unicons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -13,17 +13,20 @@ import Group from '../partials/group/Group';
 // import Card from 'react-bootstrap/Card';
 // import Stack from 'react-bootstrap/Stack';
 import Badge from 'react-bootstrap/Badge'
-
+import { useExpenseContext} from '../context/ExpenseContext';
 
 
 const Home = () => {
+
+  const { selfExpenses, setSelfExpenses,groups, setGroups } = useExpenseContext()
+  const [selfTotalBal, setSelfTotalBal]= useState(0)
+
   let today = new Date()
   let currDate = today.getFullYear() + '-' + parseInt(today.getMonth() + 1) + '-' + today.getDate()
-  const [selfExpenses, setSelfExpenses] = useState([]);
 
+  // const [selfExpenses, setSelfExpenses] = useState([]);
   const [amount, setAmount] = useState(0);
   const [title, setTitle] = useState("");
-
   const [category, setCategory] = useState("General");
   const [date, setDate] = useState(currDate);
 
@@ -31,13 +34,21 @@ const Home = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [groups, setGroups] = useState([]);
+  // const [groups, setGroups] = useState([]);
   const [groupTitle, setGroupTitle] = useState("");
   const [groupCategory, setGroupCategory] = useState("General");
+  // const [groupMembers, setGroupMembers] = useState([]);
   const [showGroup, setShowGroup] = useState(false);
   const handleCloseGroup = () => setShowGroup(false);
   const handleShowGroup = () => setShowGroup(true);
 
+    
+  useEffect(()=>{
+    let total=0
+    selfExpenses.forEach(exp=> total+=exp.amount)
+    setSelfTotalBal(total)
+    console.log("use effect working")
+  },[selfExpenses])
 
   const handleSubmit=(e)=>{
     e.preventDefault()
@@ -54,8 +65,9 @@ const Home = () => {
 
   const addGroup=(e)=>{
     e.preventDefault()
+    const groupId= (Math.random() + 1).toString(36).substring(2);
     let temp=groups
-    temp.push({groupTitle, groupCategory})
+    temp.push({groupId,groupTitle, groupCategory,createdBy:"Dipankar",members:[],groupExpenses:[]})
     setGroups(temp)
     setGroupTitle('')
     setGroupCategory("General")
@@ -72,11 +84,11 @@ const Home = () => {
                   <Boxes className="totalBalance" cheader="Total Balance" ctitle="" ctext={<>
                     
                     <h6 className='m-2'>
-                    Self Balance <Badge bg="primary">234234</Badge>
+                    Self Balance <Badge bg="primary">&#8377; {selfTotalBal}</Badge>
                     </h6>
                     <br/>
                     <h6 className='m-2'>
-                    Group Balance <Badge bg="primary">234234</Badge>
+                    Group Balance <Badge bg="primary">&#8377; 567</Badge>
                     </h6>
                     </>} />   
           </div></Col>
@@ -84,9 +96,12 @@ const Home = () => {
                 <Row>
                         <Col>
                           <div >
-                          <Boxes cheader="Self Transactions" ctitle="" ctext={<><button onClick={handleShow} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised mt-3" type="button">
-                          <Unicons.UilPlus className=" uil uil-at"  />
-                            </button>{selfExpenses.length>0 && selfExpenses.map((exp,idx)=><SelfExpense  key={idx} expenseData={exp}/>)} </>}/>   
+                          <Boxes cheader="Self Transactions" ctitle="" ctext={
+                            <>
+                              <button onClick={handleShow} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised mt-3" type="button">
+                            <Unicons.UilPlus className=" uil uil-at"  />
+                              </button>{selfExpenses.length>0 && selfExpenses.map((exp,idx)=><SelfExpense  key={idx} expenseData={exp}/>)} 
+                            </>}/>   
                          </div>
                   </Col>
                 </Row>
@@ -95,7 +110,7 @@ const Home = () => {
                   <div>
                   <Boxes cheader="Group Transactions" ctitle="" ctext={<> <button  onClick={handleShowGroup} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised  mt-3" type="button">
                   <Unicons.UilPlus className=" uil uil-at"  />
-                    </button>{groups.length>0 && groups.map((exp,idx)=><Group onClick={handleShow} key={idx} expenseData={exp} idx={idx}/>)} </>}/>  
+                    </button>{groups.length>0 && groups.map((exp,idx)=><Group onClick={handleShow} key={idx} expenseData={exp} idx={exp.groupId}/>)} </>}/>  
                  </div>
           </Col>
         </Row>
@@ -147,10 +162,8 @@ const Home = () => {
           onChange={(e)=>{setDate(e.target.value)}}
           value={date}
           className="form-style"
-   
           id="date"
           autoComplete="off"
-          pattern="\d{2}/\d{2}/\d{4}" 
           required
         />
         <Unicons.UilCalender  className="input-icon uil uil-at"  />

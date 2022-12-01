@@ -4,7 +4,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import GroupMenu from './partials/group/GroupMenu';
-import About from './partials/group/About';
+import About from './pages/About';
 import Contact from './pages/Contact';
 
 function App() {
