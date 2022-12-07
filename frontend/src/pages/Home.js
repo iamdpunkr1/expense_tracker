@@ -10,21 +10,19 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import SelfExpense from '../partials/Expenses/SelfExpense';
 import Group from '../partials/group/Group';
-// import Card from 'react-bootstrap/Card';
-// import Stack from 'react-bootstrap/Stack';
 import Badge from 'react-bootstrap/Badge'
 import { useExpenseContext} from '../context/ExpenseContext';
 
 
 const Home = () => {
-
-  const { selfExpenses, setSelfExpenses,groups, setGroups } = useExpenseContext()
-  const [selfTotalBal, setSelfTotalBal]= useState(0)
-
   let today = new Date()
   let currDate = today.getFullYear() + '-' + parseInt(today.getMonth() + 1) + '-' + today.getDate()
 
-  // const [selfExpenses, setSelfExpenses] = useState([]);
+  const { selfExpenses, setSelfExpenses,groups, setGroups } = useExpenseContext()
+  const userName="Dipankar Prasad"
+  const userEmail="dpunkr@gmail.com"
+
+
   const [amount, setAmount] = useState(0);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("General");
@@ -34,47 +32,51 @@ const Home = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // const [groups, setGroups] = useState([]);
   const [groupTitle, setGroupTitle] = useState("");
   const [groupCategory, setGroupCategory] = useState("General");
-  // const [groupMembers, setGroupMembers] = useState([]);
   const [showGroup, setShowGroup] = useState(false);
   const handleCloseGroup = () => setShowGroup(false);
   const handleShowGroup = () => setShowGroup(true);
 
-    
+  let total=0
+  selfExpenses.forEach(exp=> total+=parseInt(exp.amount))
+
+  let groupTotal=0
+  groups.forEach(grp=>grp.members.forEach(mem=> {if(mem.memberEmail===userEmail){groupTotal+=mem.groupBalance}}))
+
+  //refresh every time there is a change in expenses
   useEffect(()=>{
-    let total=0
-    selfExpenses.forEach(exp=> total+=exp.amount)
-    setSelfTotalBal(total)
-    console.log("use effect working")
-  },[selfExpenses])
+
+},[groups,selfExpenses])
 
   const handleSubmit=(e)=>{
     e.preventDefault()
-    let temp=selfExpenses
-    temp.push({title,amount,category,date})
-    setSelfExpenses(temp)
+    const expenseId= (Math.random() + 1).toString(36).substring(2);
+    setSelfExpenses([...selfExpenses,{id:expenseId,title,amount,category,date}])
     setAmount(0)
     setTitle('')
     setCategory("General")
     setDate(currDate)
-    console.log(selfExpenses)
     handleClose()
   }
 
-  const addGroup=(e)=>{
+  const addGroup=(e)=>{ 
     e.preventDefault()
     const groupId= (Math.random() + 1).toString(36).substring(2);
-    let temp=groups
-    temp.push({groupId,groupTitle, groupCategory,createdBy:"Dipankar",members:[],groupExpenses:[]})
-    setGroups(temp)
+    setGroups([...groups,{groupId,groupTitle, groupCategory,amount:0,createdBy:userName,members:[{memberName:userName, memberEmail:userEmail, groupBalance:0}],groupExpenses:[]}])
     setGroupTitle('')
     setGroupCategory("General")
     setDate(currDate)
     console.log(groups)
     handleCloseGroup()
   }
+
+  const deleteSelfExpense=(id)=>{
+    const newExpenses=selfExpenses.filter(expense=> expense.id !== id )
+    setSelfExpenses(newExpenses)
+    // console.log("delete expense called")
+  }
+
     return ( <>
         <Navigation/>
         <Container className='mt-5'>
@@ -83,24 +85,24 @@ const Home = () => {
           <div className='box1'>  
                   <Boxes className="totalBalance" cheader="Total Balance" ctitle="" ctext={<>
                     
-                    <h6 className='m-2'>
-                    Self Balance <Badge bg="primary">&#8377; {selfTotalBal}</Badge>
-                    </h6>
+                    <p className='m-2'>
+                    Self Balance <Badge bg="primary">&#8377; {total}</Badge>
+                    </p>
                     <br/>
-                    <h6 className='m-2'>
-                    Group Balance <Badge bg="primary">&#8377; 567</Badge>
-                    </h6>
+                    <p className='m-2'>
+                    Group Balance <Badge bg="primary">&#8377; {groupTotal}</Badge>
+                    </p>
                     </>} />   
           </div></Col>
           <Col sm={12} md={8}>
                 <Row>
                         <Col>
-                          <div >
+                          <div>
                           <Boxes cheader="Self Transactions" ctitle="" ctext={
                             <>
                               <button onClick={handleShow} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised mt-3" type="button">
                             <Unicons.UilPlus className=" uil uil-at"  />
-                              </button>{selfExpenses.length>0 && selfExpenses.map((exp,idx)=><SelfExpense  key={idx} expenseData={exp}/>)} 
+                              </button>{selfExpenses.length>0 && selfExpenses.map((exp)=><SelfExpense deleteSelfExpense={deleteSelfExpense}  key={exp.id} expenseData={exp}/>)} 
                             </>}/>   
                          </div>
                   </Col>
@@ -110,7 +112,7 @@ const Home = () => {
                   <div>
                   <Boxes cheader="Group Transactions" ctitle="" ctext={<> <button  onClick={handleShowGroup} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised  mt-3" type="button">
                   <Unicons.UilPlus className=" uil uil-at"  />
-                    </button>{groups.length>0 && groups.map((exp,idx)=><Group onClick={handleShow} key={idx} expenseData={exp} idx={exp.groupId}/>)} </>}/>  
+                    </button>{groups.length>0 && groups.map((exp,idx)=><Group onClick={handleShow} key={exp.groupId} expenseData={exp} idx={exp.groupId}/>)} </>}/>  
                  </div>
           </Col>
         </Row>

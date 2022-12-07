@@ -12,12 +12,12 @@ const Boxes = ({cheader,ctitle,ctext}) => {
         <Card.Header>{cheader} </Card.Header>
         <Card.Body >
           <Card.Title>{ctitle}</Card.Title>
-          <Card.Text className='mt-1 d-flex flex-row flex-nowrap'>
+          <div className='mt-1 d-flex flex-row flex-nowrap'>
             {ctext}
-          </Card.Text>
+          </div>
         </Card.Body>
       </Card>  
      );
 }
- 
+
 export default Boxes;

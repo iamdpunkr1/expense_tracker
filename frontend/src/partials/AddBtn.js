@@ -8,15 +8,23 @@ import Badge from 'react-bootstrap/Badge';
 // import Tab from 'react-bootstrap/Tab';
 // import Tabs from 'react-bootstrap/Tabs';
 import * as Unicons from '@iconscout/react-unicons';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
+import { useExpenseContext } from '../context/ExpenseContext';
+import { useParams } from 'react-router-dom';
 
 
 const AddBtn = () => {
+
+  const { groups,setGroups } = useExpenseContext()
+  let { id } = useParams();
+  
+  const [groupData,setGroupData] = useState(groups.filter(group=>group.groupId===id))
+
   let today = new Date()
   let currDate = today.getFullYear() + '-' + parseInt(today.getMonth() + 1) + '-' + today.getDate()
-  const [selfExpenses, setSelfExpenses] = useState([]);
 
-  const [amount, setAmount] = useState(0);
+
+  const [currAmount, setAmount] = useState(0);
   const [title, setTitle] = useState("");
 
   const [category, setCategory] = useState("General");
@@ -26,27 +34,61 @@ const AddBtn = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+
+  const [memberName, setMemberName] = useState("")
+  const [memberEmail, setMemberEmail] = useState("")
   const [showMember, setShowMember] = useState(false);
   const handleCloseMember = () => setShowMember(false);
   const handleShowMember = () => setShowMember(true);
 
+  useEffect(()=>{
+    // console.log("from group menu", groupData)
+    // console.log("addBtn useEffect=> ",groups)
+    setGroupData(groups.filter(group=>group.groupId===id))
+},[groups,id])
+
+
+ //Add expense
   const handleSubmit=(e)=>{
     e.preventDefault()
-    let temp=selfExpenses
-    temp.push({title,amount,category,date})
-    setSelfExpenses(temp)
+    setGroups(groups.map(group=>{
+      if(group.groupId===id){
+        return {...group, amount:group.amount+parseInt(currAmount),
+                         groupExpenses:[...group.groupExpenses,{title,category,date,amount:parseInt(currAmount)}],
+                         members:group.members.map(member=> {return {...member,groupBalance:member.groupBalance+currAmount/group.members.length}})
+                        }
+                    }else{
+        return group
+      }
+    }))
+
     setAmount(0)
     setTitle('')
     setCategory("General")
     setDate(currDate)
-    console.log(selfExpenses)
     handleClose()
+  }
+
+
+  const addMember=(e)=>{
+    e.preventDefault()
+    setShowMember(false);
+    setGroups(groups.map(group=>{
+      if(group.groupId===id){
+        return {...group, members:[...group.members,{memberName,memberEmail,groupBalance:0}]}
+      }else{
+        return group
+      }
+    }))
+    setMemberEmail('')
+    setMemberName('')
+
   }
     return ( 
     <>
         <DropdownButton drop="start" id="dropdown-basic-button" title="+ Create " className='m-2'>
-        <Dropdown.Item href="" onClick={handleShow}><Unicons.UilReceiptAlt   /> Add Expense</Dropdown.Item>
-        <Dropdown.Item href=""  onClick={handleShowMember}><Unicons.UilUsersAlt  /> Add Member</Dropdown.Item>
+          <Dropdown.Item href="" onClick={handleShow}><Unicons.UilReceiptAlt   /> Add Expense</Dropdown.Item>
+          <Dropdown.Item href=""  onClick={handleShowMember}><Unicons.UilUsersAlt  /> Add Member</Dropdown.Item>
         </DropdownButton>
 
         
@@ -63,7 +105,7 @@ const AddBtn = () => {
               type="number"
               name="amount"
               onChange={(e)=>{setAmount(e.target.value)}}
-              value={amount}
+              value={currAmount}
               className="form-style"
               placeholder="0"
               id="num"
@@ -116,14 +158,12 @@ const AddBtn = () => {
       <div>
       <br/>
       <p>Split:</p>
-          <Button variant="primary" className='m-1 equally'>
-          Akash Chetia <Badge bg="secondary">&#8377; 50</Badge>
-          <span className="visually-hidden">unread messages</span>
-        </Button>
-          <Button variant="primary" className='m-1 equally'>
-          Dipankar Prasad <Badge bg="secondary">&#8377; 50</Badge>
-          <span className="visually-hidden"> 50</span>
-        </Button>
+      {groupData[0].members.length>0 && groupData[0].members.map(member=>
+        <Button key={member.memberEmail} variant="primary" className='m-1 equally'>
+          {member.memberName} <Badge bg="secondary">&#8377; {currAmount/groupData[0].members.length}</Badge>
+           <span className="visually-hidden">unread messages</span>
+        </Button>)}
+
       </div>
         </Form.Group>
         <Modal.Footer>
@@ -146,15 +186,31 @@ const AddBtn = () => {
     </Modal.Header>
     </div>
     <Modal.Body >
-      <form >
+      <form onSubmit={addMember}>
       <div className="form-group mt-3">
       <input
+          onChange={(e)=>{setMemberName(e.target.value)}}
+          type="text"
+          name="memberName"
+          className="form-style"
+          placeholder="Member Name"
+          id="memberName"
+          autoComplete="off"
+          value={memberName}
+          required
+      />
+      <Unicons.UilUser className="input-icon uil uil-at"  />
+      </div>
+      <div className="form-group mt-3">
+      <input
+        onChange={(e)=>{setMemberEmail(e.target.value)}}
         type="email"
-        name="logemail"
+        name="memberEmail"
         className="form-style"
         placeholder="Enter member's email id"
-        id="logemail"
+        id="memberEmail"
         autoComplete="off"
+        value={memberEmail}
         required
       />
       <Unicons.UilAt className="input-icon uil uil-at"  />

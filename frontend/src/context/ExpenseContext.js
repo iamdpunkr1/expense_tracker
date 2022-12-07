@@ -9,17 +9,7 @@ export const ExpenseContextProvider = ({children}) =>{
                                             
  const [groups, setGroups]= useState([]);
 
-//  {
-//     groupName:"",
-//     createdBy:"",
-//     members:[{email:"",name:""},],
-//     expenses:[{
-//                 category:"",
-//                 price:"",
-//                 reason:"",
-//                 date:""
-//                     }]        
-//     },
+
 
  const value ={selfExpenses, setSelfExpenses,groups, setGroups}
  return (
