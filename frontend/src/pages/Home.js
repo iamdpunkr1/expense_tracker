@@ -23,7 +23,7 @@ const Home = () => {
   const { selfExpenses, setSelfExpenses,groups, setGroups } = useExpenseContext()
   const userName="Dipankar Prasad"
   const userEmail="dpunkr@gmail.com"
-
+  const [error, setError] = useState(null)
 
   const [amount, setAmount] = useState(0);
   const [title, setTitle] = useState("");
@@ -48,18 +48,55 @@ const Home = () => {
 
   //refresh every time there is a change in expenses
   useEffect(()=>{
+    const fetchWorkouts = async () => {
+      const response = await fetch('/dashboard', {
+        headers: {'Authorization': `Bearer ${user.token}`},
+      })
+      const json = await response.json()
 
-},[groups,selfExpenses])
+      if (response.ok) {
+        setSelfExpenses([json])
+      }
+    }
 
-  const handleSubmit=(e)=>{
+    if (user) {
+      fetchWorkouts()
+    }
+
+},[])
+
+  const handleSubmit= async(e)=>{
     e.preventDefault()
-    const expenseId= (Math.random() + 1).toString(36).substring(2);
-    setSelfExpenses([...selfExpenses,{id:expenseId,title,amount,category,date}])
-    setAmount(0)
-    setTitle('')
-    setCategory("General")
-    setDate(currDate)
-    handleClose()
+    if (!user) {
+      setError('You must be logged in')
+      return
+    }
+
+    const expense = {title,amount,category,date}
+
+    const response = await fetch('/dashboard', {
+      method: 'POST',
+      body: JSON.stringify(expense),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
+      }
+    })
+    const json = await response.json()
+
+    if (!response.ok) {
+      setError(json.error)
+      
+    }
+    if (response.ok) {
+     // const expenseId= (Math.random() + 1).toString(36).substring(2);
+      setSelfExpenses([...selfExpenses,json])
+      setAmount(0)
+      setTitle('')
+      setCategory("General")
+      setDate(currDate)
+      handleClose()  }
+
   }
 
   const addGroup=(e)=>{ 
@@ -73,8 +110,8 @@ const Home = () => {
     handleCloseGroup()
   }
 
-  const deleteSelfExpense=(id)=>{
-    const newExpenses=selfExpenses.filter(expense=> expense.id !== id )
+  const deleteSelfExpense=(_id)=>{
+    const newExpenses=selfExpenses.filter(expense=> expense._id !== _id )
     setSelfExpenses(newExpenses)
     // console.log("delete expense called")
   }
@@ -82,6 +119,7 @@ const Home = () => {
     return ( <>
         <Navigation/>
         <Container className='mt-5'>
+        {error && <div className="error">{error}</div>}
         <Row>
           <Col sm={12} md={4}>
           <div className='box1'>  
@@ -102,9 +140,10 @@ const Home = () => {
                           <div>
                           <Boxes cheader="Self Transactions" ctitle="" ctext={
                             <>
+                            
                               <button onClick={handleShow} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised mt-3" type="button">
                             <Unicons.UilPlus className=" uil uil-at"  />
-                              </button>{selfExpenses.length>0 && selfExpenses.map((exp)=><SelfExpense deleteSelfExpense={deleteSelfExpense}  key={exp.id} expenseData={exp}/>)} 
+                              </button>{selfExpenses.length>0 && selfExpenses.map((exp)=><SelfExpense deleteSelfExpense={deleteSelfExpense}  key={exp._id} expenseData={exp}/>)} 
                             </>}/>   
                          </div>
                   </Col>

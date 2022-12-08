@@ -4,7 +4,7 @@ import Badge from 'react-bootstrap/Badge'
 import * as Unicons from '@iconscout/react-unicons';
 
 const SelfExpense = ({expenseData, deleteSelfExpense}) => {
-   const {title, amount, category, date, id}=expenseData 
+   const {title, amount, category, date, _id}=expenseData 
 
   
     return (
@@ -12,7 +12,7 @@ const SelfExpense = ({expenseData, deleteSelfExpense}) => {
         <Card
         className=" selfexpense"
         >
-        <Card.Header>{category} <Unicons.UilTrashAlt className="input-icon delete" onClick={()=> deleteSelfExpense(id)}/></Card.Header>
+        <Card.Header>{category} <Unicons.UilTrashAlt className="input-icon delete" onClick={()=> deleteSelfExpense(_id)}/></Card.Header>
         <Card.Body className="cardBody">
           <Card.Text>
           {title}<br/>

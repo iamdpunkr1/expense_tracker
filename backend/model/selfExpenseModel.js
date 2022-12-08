@@ -1,28 +1,30 @@
 const mongoose = require("mongoose");
-const expenseSchema = new mongoose.Schema(
+const  selfExpenseSchema = new mongoose.Schema(
   {
-    id: {
+    title: {
       type: String,
       required:true
     },
-    date: {
-      type: Date,
-      required:true
-    },
-    amount: {
-      type: mongoose.Types.Decimal128,
+   amount: {
+      type: Number,
       required: [true, "Please Enter Amount for Expense"],
     },
-    desc: {
-      type: String,
-      required: [true, "Please Enter Description for Expense"],
-    },
-    category: {
+
+  category: {
       type: String,
     },
+    date: {
+      type: String,
+      required:true
+    },
+    user_id:{
+      type:String,
+      required: true
+    }
+
   },
   { timestamps: true }
 );
 
-const Expense = mongoose.model("expense", expenseSchema);
-module.exports = Expense;
+const SelfExpense = mongoose.model("selfExpense", selfExpenseSchema);
+module.exports = SelfExpense;

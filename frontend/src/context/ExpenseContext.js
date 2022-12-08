@@ -5,8 +5,7 @@ export const useExpenseContext = ()=> useContext(ExpenseContext)
 
 export const ExpenseContextProvider = ({children}) =>{
 //  const [userName, setUserName]= useState('');
- const [selfExpenses, setSelfExpenses]= useState([]);
-                                            
+ const [selfExpenses, setSelfExpenses]= useState([]);                                        
  const [groups, setGroups]= useState([]);
 
 
