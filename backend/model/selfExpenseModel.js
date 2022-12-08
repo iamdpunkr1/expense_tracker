@@ -3,9 +3,11 @@ const expenseSchema = new mongoose.Schema(
   {
     id: {
       type: String,
+      required:true
     },
     date: {
       type: Date,
+      required:true
     },
     amount: {
       type: mongoose.Types.Decimal128,

@@ -14,15 +14,15 @@ const userSchema= new Schema({
         type: String,
         required: true
     },
-    name:{
+    username:{
         type: String,
         required: true
     }
 })
 
 // static SignUP method
-userSchema.statics.signup=async function(email, password, name){
-    if(!email || !password || !name){
+userSchema.statics.signup=async function(email, password, username){
+    if(!email || !password || !username){
         throw Error("All fields must be filled")
     }
 
@@ -34,7 +34,7 @@ userSchema.statics.signup=async function(email, password, name){
     //     throw Error("Password is not Strong")
     // }
 
-    if(!validator.isAlpha(name)){
+    if(!validator.isAlpha(username,['en-US'], {'ignore': ' _-'})){
         throw Error("Name must contain only alphabets")
     }
 
@@ -46,7 +46,7 @@ userSchema.statics.signup=async function(email, password, name){
 
     const salt= await bcrypt.genSalt(10)
     const hash= await bcrypt.hash(password, salt)
-    const user= await this.create({email, password:hash, name}) 
+    const user= await this.create({email, password:hash, username}) 
 
     return user
 

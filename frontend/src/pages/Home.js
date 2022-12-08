@@ -12,9 +12,11 @@ import SelfExpense from '../partials/Expenses/SelfExpense';
 import Group from '../partials/group/Group';
 import Badge from 'react-bootstrap/Badge'
 import { useExpenseContext} from '../context/ExpenseContext';
-
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const Home = () => {
+  const { user } = useAuthContext()
+  console.log(user.user.username)
   let today = new Date()
   let currDate = today.getFullYear() + '-' + parseInt(today.getMonth() + 1) + '-' + today.getDate()
 

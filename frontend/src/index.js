@@ -4,15 +4,18 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ExpenseContextProvider } from './context/ExpenseContext';
-
+import { AuthContextProvider } from './context/AuthContext';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ExpenseContextProvider>
-      <App />
-    </ExpenseContextProvider>
+  <AuthContextProvider>
+      <ExpenseContextProvider>
+        <App />
+     </ExpenseContextProvider>
+    </AuthContextProvider>
+
   </React.StrictMode>
 );
 
