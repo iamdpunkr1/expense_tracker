@@ -4,10 +4,10 @@ import Col from 'react-bootstrap/Col';
 import { Link } from 'react-router-dom';
 
 
-const Group = ({expenseData,idx}) => {
-    const {groupTitle, groupCategory}=expenseData 
+const Group = ({expenseData}) => {
+    const {groupTitle, groupCategory,_id}=expenseData 
     return (  
-      <Link to={`/groups/${idx}`}>
+      <Link to={`/groups/${_id}`}>
         <Col>
               <Button className='groups'>
               {groupTitle+"   "}<br/><Badge bg="secondary">{"   "+groupCategory}</Badge>

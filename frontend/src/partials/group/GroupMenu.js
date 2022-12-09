@@ -18,11 +18,11 @@ const GroupMenu = () => {
   const { groups } = useExpenseContext()
 
   let { id } = useParams();
-  const [groupData,setGroupData] = useState(groups.filter(group=>group.groupId===id))
+  const [groupData,setGroupData] = useState(groups.filter(group=>group._id===id))
 
   useEffect(()=>{
     console.log("GroupMenu useEffect=> ",groups)
-    setGroupData(groups.filter(group=>group.groupId===id))
+    setGroupData(groups.filter(group=>group._id===id))
 },[groups,id])
 
 

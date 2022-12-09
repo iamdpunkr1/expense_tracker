@@ -18,7 +18,7 @@ const AddBtn = () => {
   const { groups,setGroups } = useExpenseContext()
   let { id } = useParams();
   
-  const [groupData,setGroupData] = useState(groups.filter(group=>group.groupId===id))
+  const [groupData,setGroupData] = useState(groups.filter(group=>group._id===id))
 
   let today = new Date()
   let currDate = today.getFullYear() + '-' + parseInt(today.getMonth() + 1) + '-' + today.getDate()
@@ -44,7 +44,7 @@ const AddBtn = () => {
   useEffect(()=>{
     // console.log("from group menu", groupData)
     // console.log("addBtn useEffect=> ",groups)
-    setGroupData(groups.filter(group=>group.groupId===id))
+    setGroupData(groups.filter(group=>group._id===id))
 },[groups,id])
 
 
@@ -52,7 +52,7 @@ const AddBtn = () => {
   const handleSubmit=(e)=>{
     e.preventDefault()
     setGroups(groups.map(group=>{
-      if(group.groupId===id){
+      if(group._id===id){
         return {...group, amount:group.amount+parseInt(currAmount),
                          groupExpenses:[...group.groupExpenses,{title,category,date,amount:parseInt(currAmount)}],
                          members:group.members.map(member=> {return {...member,groupBalance:member.groupBalance+currAmount/group.members.length}})
@@ -74,7 +74,7 @@ const AddBtn = () => {
     e.preventDefault()
     setShowMember(false);
     setGroups(groups.map(group=>{
-      if(group.groupId===id){
+      if(group._id===id){
         return {...group, members:[...group.members,{memberName,memberEmail,groupBalance:0}]}
       }else{
         return group

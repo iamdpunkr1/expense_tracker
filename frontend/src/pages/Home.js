@@ -16,13 +16,13 @@ import { useAuthContext } from '../hooks/useAuthContext';
 
 const Home = () => {
   const { user } = useAuthContext()
-  console.log(user.user.username)
+  // console.log(user.user.username)
   let today = new Date()
   let currDate = today.getFullYear() + '-' + parseInt(today.getMonth() + 1) + '-' + today.getDate()
 
   const { selfExpenses, setSelfExpenses,groups, setGroups } = useExpenseContext()
-  const userName="Dipankar Prasad"
-  const userEmail="dpunkr@gmail.com"
+  // const userName="Dipankar Prasad"
+  // const userEmail="dpunkr@gmail.com"
   const [error, setError] = useState(null)
 
   const [amount, setAmount] = useState(0);
@@ -44,26 +44,42 @@ const Home = () => {
   selfExpenses.forEach(exp=> total+=parseInt(exp.amount))
 
   let groupTotal=0
-  groups.forEach(grp=>grp.members.forEach(mem=> {if(mem.memberEmail===userEmail){groupTotal+=mem.groupBalance}}))
+  // groups.forEach(grp=>grp.members.forEach(mem=> {if(mem.memberEmail===userEmail){groupTotal+=mem.groupBalance}}))
 
-  //refresh every time there is a change in expenses
+  // //refresh every time there is a change in expenses
   useEffect(()=>{
-    const fetchWorkouts = async () => {
+    const fetchSelfExpenses = async () => {
       const response = await fetch('/dashboard', {
         headers: {'Authorization': `Bearer ${user.token}`},
       })
       const json = await response.json()
 
       if (response.ok) {
-        setSelfExpenses([json])
+        setSelfExpenses(json)
       }
     }
 
+    const fetchGroups = async () => {
+      const response = await fetch('/dashboard/groups',{
+        headers:{
+          'Authorization':`Bearer ${user.token}`
+        }
+      })
+
+      const json = await response.json()
+
+      if(response.ok){
+        setGroups(json)
+      }
+    }
+  
+
     if (user) {
-      fetchWorkouts()
+      fetchSelfExpenses()
+      fetchGroups()
     }
 
-},[])
+},[user,setSelfExpenses,setGroups])
 
   const handleSubmit= async(e)=>{
     e.preventDefault()
@@ -99,21 +115,58 @@ const Home = () => {
 
   }
 
-  const addGroup=(e)=>{ 
+  //creating groups
+  const addGroup= async(e)=>{ 
     e.preventDefault()
-    const groupId= (Math.random() + 1).toString(36).substring(2);
-    setGroups([...groups,{groupId,groupTitle, groupCategory,amount:0,createdBy:userName,members:[{memberName:userName, memberEmail:userEmail, groupBalance:0}],groupExpenses:[]}])
-    setGroupTitle('')
-    setGroupCategory("General")
-    setDate(currDate)
-    console.log(groups)
-    handleCloseGroup()
+    if(!user){
+      setError("You must be logged in")
+    }
+    const group={groupTitle, groupCategory,amount:0,createdBy:user.user.username,members:[{memberName:user.user.username, memberEmail:user.user.email, groupBalance:0}],groupExpenses:[]}
+    const response = await fetch('/dashboard/groups',{
+      method:'POST',
+      body:JSON.stringify(group),
+      headers:{
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${user.token}`
+      }
+    })
+
+    const json = await response.json()
+    if(response.ok){
+          setGroups([...groups,json]) 
+          setGroupTitle('')
+          setGroupCategory("General")
+          setDate(currDate)
+          handleCloseGroup()
+    }
+   // const groupId= (Math.random() + 1).toString(36).substring(2);
+   // setGroups([...groups,{groupId,groupTitle, groupCategory,amount:0,createdBy:userName,members:[{memberName:userName, memberEmail:userEmail, groupBalance:0}],groupExpenses:[]}])
+
   }
 
-  const deleteSelfExpense=(_id)=>{
-    const newExpenses=selfExpenses.filter(expense=> expense._id !== _id )
-    setSelfExpenses(newExpenses)
-    // console.log("delete expense called")
+  //delete a expense
+  const deleteSelfExpense= async (_id)=>{
+    if(!user){
+        setError('You must be logged in')
+          return
+        }
+
+    const response = await fetch('/dashboard/'+_id,{
+      method:'DELETE',
+      headers:{
+        'Authorization': `Bearer ${user.token}`
+      }
+    })
+
+    const json = await response.json()
+
+    if(response.ok){
+      const newExpenses=selfExpenses.filter(expense=> expense._id !== json._id )
+      setSelfExpenses(newExpenses)
+    }
+    
+    
+ 
   }
 
     return ( <>
@@ -153,7 +206,7 @@ const Home = () => {
                   <div>
                   <Boxes cheader="Group Transactions" ctitle="" ctext={<> <button  onClick={handleShowGroup} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised  mt-3" type="button">
                   <Unicons.UilPlus className=" uil uil-at"  />
-                    </button>{groups.length>0 && groups.map((exp,idx)=><Group onClick={handleShow} key={exp.groupId} expenseData={exp} idx={exp.groupId}/>)} </>}/>  
+                    </button>{groups.length>0 && groups.map((exp)=><Group onClick={handleShow} key={exp._id} expenseData={exp} />)} </>}/>  
                  </div>
           </Col>
         </Row>

@@ -5,7 +5,6 @@ import * as Unicons from '@iconscout/react-unicons';
 
 const SelfExpense = ({expenseData, deleteSelfExpense}) => {
    const {title, amount, category, date, _id}=expenseData 
-
   
     return (
         <Col>

@@ -3,6 +3,7 @@ const express= require('express')
 const mongoose = require('mongoose')
 const userRoutes = require('./routes/user')
 const selfExpenseRoutes = require('./routes/selfExpenseRoutes')
+const groupRoutes = require('./routes/groupRoutes')
 
 const app = express()
 
@@ -17,6 +18,7 @@ app.get('/',(req,res)=>{
 })
 app.use('/',userRoutes)
 app.use('/',selfExpenseRoutes)
+app.use('/',groupRoutes)
 
 mongoose.connect(process.env.MONGO_URI)
     .then(()=>{
