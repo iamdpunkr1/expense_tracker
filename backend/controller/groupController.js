@@ -23,8 +23,8 @@ const addGroup = async(req,res)=>{
 //getting all groups
 const getGroups = async (req,res) => {
     try{
-        const user_id = req.user._id
-        const groups = await Group.find({user_id}).sort({createdAt:-1})
+        const email = req.user.email
+        const groups = await Group.find({"members.memberEmail":email}).sort({createdAt:-1})
         res.status(200).json(groups)
     }catch(error){
         res.status(400).json({error:error.message})
