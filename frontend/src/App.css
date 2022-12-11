@@ -240,3 +240,31 @@ div.error {
   border-radius: 4px;
   margin: 20px 0;
 }
+
+.groupBtn{
+  margin: 3px;
+  display: block;
+  width: 155px;
+  
+}
+
+#justify-tab-example-tab-home{
+  height: 52px !important;
+  font-size: 18px !important;
+  font-weight: 600  !important;
+  /* color: white; */
+}
+
+#justify-tab-example-tab-balanceTab{
+  height: 52px !important;
+  font-size: 18px !important;
+  font-weight: 600  !important;
+}
+
+.totalBalance h5{
+  color: #212529;
+}
+
+.memberClass{
+  padding: 11px 10px !important;
+}

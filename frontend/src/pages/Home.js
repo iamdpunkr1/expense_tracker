@@ -3,6 +3,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Navigation from "../partials/Navigation";
 import Boxes from "../partials/Boxes"
+import Card from 'react-bootstrap/Card';
 import * as Unicons from '@iconscout/react-unicons';
 import { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
@@ -44,7 +45,7 @@ const Home = () => {
   selfExpenses.forEach(exp=> total+=parseInt(exp.amount))
 
   let groupTotal=0
-  // groups.forEach(grp=>grp.members.forEach(mem=> {if(mem.memberEmail===userEmail){groupTotal+=mem.groupBalance}}))
+  groups.forEach(grp=>grp.members.forEach(mem=> {if(mem.memberEmail===user.user.email){groupTotal+=mem.groupBalance}}))
 
   // //refresh every time there is a change in expenses
   useEffect(()=>{
@@ -175,23 +176,28 @@ const Home = () => {
         {error && <div className="error">{error}</div>}
         <Row>
           <Col sm={12} md={4}>
-          <div className='box1'>  
-                  <Boxes className="totalBalance" cheader="Total Balance" ctitle="" ctext={<>
+              <Row>
+                   
+                          <Card className="totalBalance text-center" >
+                          <h5 className='mt-4'>Personal Balance</h5><h1 className='m-2'>
+                          <Badge className='mb-4' bg="dark">&#8377; {total}</Badge>
+                          </h1></Card>   
+                   
+              </Row>
+              <Row  className='mt-2'>
+                      
+                          <Card className="totalBalance text-center" >
+                          <h5 className='mt-4'>Group Balance</h5><h1 className='m-2'>
+                          <Badge className='mb-4' bg="dark">&#8377; {groupTotal}</Badge>
+                          </h1></Card>   
                     
-                    <p className='m-2'>
-                    Self Balance <Badge bg="primary">&#8377; {total}</Badge>
-                    </p>
-                    <br/>
-                    <p className='m-2'>
-                    Group Balance <Badge bg="primary">&#8377; {groupTotal}</Badge>
-                    </p>
-                    </>} />   
-          </div></Col>
+              </Row>
+          </Col>
           <Col sm={12} md={8}>
                 <Row>
                         <Col>
                           <div>
-                          <Boxes cheader="Self Transactions" ctitle="" ctext={
+                          <Boxes cheader="Personal Transactions" ctitle="" ctext={
                             <>
                             
                               <button onClick={handleShow} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised mt-3" type="button">
@@ -204,7 +210,7 @@ const Home = () => {
                 <Row>
                 <Col>
                   <div>
-                  <Boxes cheader="Group Transactions" ctitle="" ctext={<> <button  onClick={handleShowGroup} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised  mt-3" type="button">
+                  <Boxes cheader="Groups" ctitle="" ctext={<> <button  onClick={handleShowGroup} className="btn pmd-btn-fab pmd-ripple-effect btn-light pmd-btn-raised  mt-3" type="button">
                   <Unicons.UilPlus className=" uil uil-at"  />
                     </button>{groups.length>0 && groups.map((exp)=><Group onClick={handleShow} key={exp._id} expenseData={exp} />)} </>}/>  
                  </div>
